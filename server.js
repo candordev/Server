@@ -2,6 +2,10 @@ require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
 const userRoutes = require('./routes/user')
+const bodyParser = require('body-parser')
+
+
+
 
 // express app
 const app = express()
@@ -18,7 +22,7 @@ app.use((req, res, next) => {
 app.use('/api/user', userRoutes)
 
 // connect to db
-mongoose.connect('mongodb+srv:/nishant:suhas123@cluster0.i2wdm85.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     // listen for requests
     app.listen(process.env.PORT, () => {

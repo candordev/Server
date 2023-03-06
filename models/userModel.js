@@ -15,10 +15,6 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  //new stuff below for schema
-  posts: {
-    type: Array
-  }
 })
 
 // static signup method
@@ -69,8 +65,5 @@ userSchema.statics.login = async function(email, password) {
   return user
 }
 
-userSchema.methods.addPost = async function(post_id) {
-  this.posts.push(post_id)
-}
 
 module.exports = mongoose.model('User', userSchema)

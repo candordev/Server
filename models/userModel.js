@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
+const { use } = require('../routes/user')
 
 const Schema = mongoose.Schema
 
@@ -13,7 +14,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
 })
 
 // static signup method
@@ -64,3 +65,5 @@ userSchema.statics.login = async function(email, password) {
   return user
 }
 
+
+module.exports = mongoose.model('User', userSchema)

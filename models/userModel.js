@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
-const { use } = require('../routes/user')
 
 const Schema = mongoose.Schema
 
@@ -15,6 +14,8 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  username: {type: String},
+  location: {type : String},
   firstName: { type: String},
   lastName: { type: String },
   profilePicture: { type: String },
@@ -22,8 +23,11 @@ const userSchema = new Schema({
   dateOfBirth: { type: Date },
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }], // connects to the post model by referencing the post id
   messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }]
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
+  flameCount: { type: Number, default: 0 },
+  bio: { type: String },
+  savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
 
 })
 
@@ -32,8 +36,6 @@ userSchema.statics.signup = async function(userData) { // async function allows 
   console.log(userData)
 
   // validation
-  console.log(email, password)
-  if (!email || !password) {
   if (!userData.email || !userData.password) {
     throw Error('All fields must be filled')
   }
@@ -80,7 +82,7 @@ userSchema.statics.login = async function(email, password) {
   return user
 }
 
+// the methods above are built into userSchema ontop of methods like .find() and .create() that are built into mongoose
 
 module.exports = mongoose.model('User', userSchema)
-
 

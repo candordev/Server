@@ -13,7 +13,7 @@ const loginUser = async (req, res) => {
     const user = await User.login(email, password)
 
     // create a token
-    const token = createToken(user._id) // creates token for the user based on the foudn user schema found by email and password above
+    const token = createToken(user._id) // creates token for the user based on the found user schema found by email and password above
 
     res.status(200).json({email, token})// the token is sent to the front end to allow user specifc access to the backend and user specfic ui
   } catch (error) {

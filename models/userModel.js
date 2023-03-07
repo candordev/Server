@@ -14,6 +14,8 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  username: {type: String},
+  location: {type : String},
   firstName: { type: String},
   lastName: { type: String },
   profilePicture: { type: String },
@@ -76,6 +78,8 @@ userSchema.statics.login = async function(email, password) {
 
   return user
 }
+
+// the methods above are built into userSchema ontop of methods like .find() and .create() that are built into mongoose
 
 module.exports = mongoose.model('User', userSchema)
 

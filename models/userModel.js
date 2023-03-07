@@ -23,8 +23,11 @@ const userSchema = new Schema({
   dateOfBirth: { type: Date },
   posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }], // connects to the post model by referencing the post id
   messages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
-  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }]
+  followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
+  flameCount: { type: Number, default: 0 },
+  bio: { type: String },
+  savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
 
 })
 

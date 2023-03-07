@@ -23,10 +23,14 @@ const loginUser = async (req, res) => {
 
 // signup a user
 const signupUser = async (req, res) => {
-  const {email, password} = req.body
+  const {email, password, firstName, lastName, profilePicture, bio, dateOfBirth} = req.body
+  
 
   try {
-    const user = await User.signup(email, password) //sign up method with email and password hashed using a fucntion in user model. Saves the user in format user schema into the database as well as into varibale user here.
+    const userData = {email, password, firstName, lastName, profilePicture, bio, dateOfBirth}
+    console.log(userData)
+
+    const user = await User.signup(userData) //sign up method with email and password hashed using a fucntion in user model. Saves the user in format user schema into the database as well as into varibale user here.
 
     // create a token
     const token = createToken(user._id) // creates token based on user schema made by email and password above

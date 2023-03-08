@@ -12,9 +12,16 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
+    location: {
+        type: String,
+        required: true
+    },
     contentType: {
         type: String,
         required: true
+    },
+    imgURL: {
+        type: String,
     },
     upvotes: {
         type: [mongoose.Schema.ObjectId],
@@ -26,14 +33,13 @@ const postSchema = new Schema({
     },
     content: {
         type: String,
-        required: true
     },
     pollOptions: {
         type: Array,
     },
-  img: {
-    type: String,
-  },
+    pollResults: {
+        type: Array,
+    },
   comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
 })
 

@@ -3,10 +3,9 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const postSchema = new Schema({
-  uid: {
+  user: {
     type: mongoose.Schema.ObjectId,
     required: true,
-    unique: true
   },
     title: {
         type: String,
@@ -40,7 +39,7 @@ const postSchema = new Schema({
     pollResults: {
         type: Array,
     },
-  comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
+  //comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
 })
 
 postSchema.methods.editPost = async function (title, content, img) {
@@ -55,23 +54,23 @@ postSchema.statics.deletePost = async function (id) {
 }
 
 postSchema.methods.incrementUpvote = async function (uid) {
-    if (this.upvotes.includes(uid)) {
-        this.upvotes = this.upvotes.filter((user) => user !== uid)
+    if (this.upvotes.includes(new mongoose.Types.ObjectId(uid))) {
+        this.upvotes = this.upvotes.filter((user) => user.toString() !== uid)
     }
     else {
-        this.upvotes.push(uid)
-        this.downvotes = this.downvotes.filter((user) => user !== uid)
+        this.upvotes.push(new mongoose.Types.ObjectId(uid))
+        this.downvotes = this.downvotes.filter((user) => user.toString() !== uid)
     }
     await this.save()
 }
 
 postSchema.methods.incrementDownvote = async function (uid) {
-    if (this.downvotes.includes(uid)) {
-        this.downvotes = this.downvotes.filter((user) => user !== uid)
+    if (this.downvotes.includes(new mongoose.Types.ObjectId(uid))) {
+        this.downvotes = this.downvotes.filter((user) => user.toString() !== uid)
     }
     else {
-        this.downvotes.push(uid)
-        this.upvotes = this.upvotes.filter((user) => user !== uid)
+        this.downvotes.push(new mongoose.Types.ObjectId(uid))
+        this.upvotes = this.upvotes.filter((user) => user.toString() !== uid)
     }
     await this.save()
 }

@@ -4,13 +4,24 @@ const User = require('../models/userModel')
 
 const createPost = async (req, res) => {
     try {
-        _id = req.body._id
-        if (req.img) {
-            const post = await Post.create({uid: _id, title: req.title, content: req.content, img: req.img})
-            const user = await User.findOne({_id})
-            user.addPost(post._id)
-        }
-        await Post.create({uid: _id, title: req.title, content: req.content})
+        const {user,title,location,contentType,imgURL, content, pollOptions, pollResults} = req.body
+        const post = await Post.create({user, title, location, contentType, imgURL, content, pollOptions, pollResults})
+        const tempUser = await User.findOne({_id: user})
+        console.log(tempUser.email,tempUser.password)
+        await tempUser.addPost(post._id)
+        res.status(200).json({id: post._id,title,content,message: "Post created"})
+    } catch (error) {
+        res.status(404).json({error: error.message})
+    }
+}
+
+const deletePost = async (req, res) => {
+    try {
+        const {user,id} = req.body
+        await Post.findByIdAndDelete(id)
+        const tempUser = await User.findOne({_id: user})
+        await tempUser.removePost(id)
+        res.status(200).json({message: "Post deleted with id: " + id})
     } catch (error) {
         res.status(404).json({error: error.message})
     }
@@ -18,11 +29,10 @@ const createPost = async (req, res) => {
 
 const upVote = async (req, res) => {
     try {
-        _id = req.body._id
-        postId = req.body.postId
-        const user = await User.findOne({_id})
+        const _id = req.body.user
+        const postId = req.body.postId
         const post = await Post.findOne({_id: postId})
-        post.incrementUpvote(user._id)
+        await post.incrementUpvote(_id)
         res.send("upvote incremented)")
     } catch (error) {
         res.status(404).json({error: error.message})
@@ -31,15 +41,14 @@ const upVote = async (req, res) => {
 
 const downVote = async (req, res) => {
     try {
-        _id = req.body._id
-        postId = req.body.postId
-        const user = await User.findOne({_id})
+        const _id = req.body.user
+        const postId = req.body.postId
         const post = await Post.findOne({_id: postId})
-        post.incrementDownvote(user._id)
+        await post.incrementDownvote(_id)
         res.send("downvote incremented)")
     } catch (error) {
         res.status(404).json({error: error.message})
     }
 }
 
-module.exports = { createPost }
+module.exports = { createPost, deletePost, upVote, downVote }

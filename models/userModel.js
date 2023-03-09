@@ -13,7 +13,8 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+  posts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}]
 })
 
 // static signup method
@@ -62,6 +63,25 @@ userSchema.statics.login = async function(email, password) {
   }
 
   return user
+}
+
+userSchema.methods.addPost = async function(postID) {
+  try {
+    this.posts.push(postID)
+    await this.save()
+  } catch (error) {
+    throw Error(error)
+  }
+}
+
+userSchema.methods.removePost = async function(postID) {
+  try {
+    this.posts = this.posts.filter((post) => post.toString() !== postID);
+    console.log("post removed")
+    await this.save()
+  } catch (error) {
+    throw Error(error)
+  }
 }
 
 module.exports = mongoose.model('User', userSchema)

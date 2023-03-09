@@ -15,13 +15,24 @@ const createPost = async (req, res) => {
     }
 }
 
+const editPost = async (req, res) => {
+    try {
+        const post = await Post.findOne({_id: req.body.postId})
+        await post.editPost(req.body)
+        res.send("successfully edited post")
+    } catch (error) {
+        res.status(404).json({error: error.message})
+    }
+}
+        
+
 const deletePost = async (req, res) => {
     try {
-        const {user,id} = req.body
-        await Post.findByIdAndDelete(id)
+        const {user,postId} = req.body
+        await Post.findByIdAndDelete(postId)
         const tempUser = await User.findOne({_id: user})
-        await tempUser.removePost(id)
-        res.status(200).json({message: "Post deleted with id: " + id})
+        await tempUser.removePost(postId)
+        res.status(200).json({message: "Post deleted with id: " + postId})
     } catch (error) {
         res.status(404).json({error: error.message})
     }
@@ -51,4 +62,4 @@ const downVote = async (req, res) => {
     }
 }
 
-module.exports = { createPost, deletePost, upVote, downVote }
+module.exports = { createPost, deletePost, upVote, downVote, editPost }

@@ -42,10 +42,14 @@ const postSchema = new Schema({
   //comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
 })
 
-postSchema.methods.editPost = async function (title, content, img) {
-    this.title = title
-    this.content = content
-    this.img = img
+postSchema.methods.editPost = async function (reqObj) {
+    this.title = reqObj.title || this.title
+    this.location = reqObj.location || this.location
+    this.contentType = reqObj.contentType || this.contentType
+    this.imgURL = reqObj.imgURL || this.imgURL
+    this.content = reqObj.content || this.content
+    this.pollOptions = reqObj.pollOptions || this.pollOptions
+    this.pollResults = reqObj.pollResults || this.pollResults
     await this.save()
 }
 
@@ -55,22 +59,22 @@ postSchema.statics.deletePost = async function (id) {
 
 postSchema.methods.incrementUpvote = async function (uid) {
     if (this.upvotes.includes(new mongoose.Types.ObjectId(uid))) {
-        this.upvotes = this.upvotes.filter((user) => user.toString() !== uid)
+        this.upvotes = this.upvotes.filter((user) => !user.equals(new mongoose.Types.ObjectId(uid)));
     }
     else {
         this.upvotes.push(new mongoose.Types.ObjectId(uid))
-        this.downvotes = this.downvotes.filter((user) => user.toString() !== uid)
+        this.downvotes = this.downvotes.filter((user) => !user.equals(new mongoose.Types.ObjectId(uid)))
     }
     await this.save()
 }
 
 postSchema.methods.incrementDownvote = async function (uid) {
     if (this.downvotes.includes(new mongoose.Types.ObjectId(uid))) {
-        this.downvotes = this.downvotes.filter((user) => user.toString() !== uid)
+        this.downvotes = this.downvotes.filter((user) => !user.equals(new mongoose.Types.ObjectId(uid)))
     }
     else {
         this.downvotes.push(new mongoose.Types.ObjectId(uid))
-        this.upvotes = this.upvotes.filter((user) => user.toString() !== uid)
+        this.upvotes = this.upvotes.filter((user) => !user.equals(new mongoose.Types.ObjectId(uid)))
     }
     await this.save()
 }

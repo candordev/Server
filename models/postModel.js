@@ -39,7 +39,8 @@ const postSchema = new Schema({
     pollResults: {
         type: Array,
     },
-  //comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
+    date: { type: Date, default: Date.now },
+  comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
 })
 
 postSchema.methods.editPost = async function (reqObj) {
@@ -79,6 +80,23 @@ postSchema.methods.incrementDownvote = async function (uid) {
     await this.save()
 }
 
+postSchema.methods.addComment = async function(commentID) {
+    try {
+      this.comments.push(commentID)
+      await this.save()
+    } catch (error) {
+      throw Error(error)
+    }
+  }
+  
+  postSchema.methods.removeComment = async function(commentID) {
+    try {
+        this.comments = this.comments.filter((comment) => !comment.equals(new mongoose.Types.ObjectId(commentID)))
+        await this.save()
+    } catch (error) {
+      throw Error(error)
+    }
+  }
 
 
 

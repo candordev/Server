@@ -1,5 +1,4 @@
 const Post = require('../models/postModel')
-const jwt = require('jsonwebtoken')
 const User = require('../models/userModel')
 
 const createPost = async (req, res) => {
@@ -17,7 +16,7 @@ const createPost = async (req, res) => {
 
 const editPost = async (req, res) => {
     try {
-        const post = await Post.findOne({_id: req.body.postId})
+        const post = await Post.findOne({_id: req.body.postID})
         await post.editPost(req.body)
         res.send("successfully edited post")
     } catch (error) {
@@ -28,11 +27,11 @@ const editPost = async (req, res) => {
 
 const deletePost = async (req, res) => {
     try {
-        const {user,postId} = req.body
-        await Post.findByIdAndDelete(postId)
+        const {user,postID} = req.body
+        await Post.findByIdAndDelete(postID)
         const tempUser = await User.findOne({_id: user})
-        await tempUser.removePost(postId)
-        res.status(200).json({message: "Post deleted with id: " + postId})
+        await tempUser.removePost(postID)
+        res.status(200).json({message: "Post deleted with id: " + postID})
     } catch (error) {
         res.status(404).json({error: error.message})
     }
@@ -41,8 +40,8 @@ const deletePost = async (req, res) => {
 const upVote = async (req, res) => {
     try {
         const _id = req.body.user
-        const postId = req.body.postId
-        const post = await Post.findOne({_id: postId})
+        const postID = req.body.postID
+        const post = await Post.findOne({_id: postID})
         await post.incrementUpvote(_id)
         res.send("upvote incremented)")
     } catch (error) {
@@ -53,8 +52,8 @@ const upVote = async (req, res) => {
 const downVote = async (req, res) => {
     try {
         const _id = req.body.user
-        const postId = req.body.postId
-        const post = await Post.findOne({_id: postId})
+        const postID = req.body.postID
+        const post = await Post.findOne({_id: postID})
         await post.incrementDownvote(_id)
         res.send("downvote incremented)")
     } catch (error) {

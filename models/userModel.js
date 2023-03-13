@@ -65,6 +65,7 @@ userSchema.statics.login = async function(email, password) {
   return user
 }
 
+//adds post to user. Called from createPost method in postController
 userSchema.methods.addPost = async function(postID) {
   try {
     this.posts.push(postID)
@@ -74,6 +75,7 @@ userSchema.methods.addPost = async function(postID) {
   }
 }
 
+//removes post by postID
 userSchema.methods.removePost = async function(postID) {
   try {
     this.posts = this.posts.filter((post) => post.toString() !== postID);

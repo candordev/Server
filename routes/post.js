@@ -5,8 +5,8 @@ const { createPost, deletePost, upVote, downVote, editPost } = require('../contr
 const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router()
+//router uses auth because only a logged in user can use these routes
 router.use(requireAuth)
-// adding new post route route
 router.post('/createPost', createPost)
 router.delete('/deletePost', deletePost)
 router.post('/upVote', upVote)

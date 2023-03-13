@@ -5,8 +5,8 @@ const { createComment, deleteComment } = require('../controllers/commentControll
 const requireAuth = require('../middleware/requireAuth')
 
 const router = express.Router()
+//router uses auth because only a logged in user can use these routes
 router.use(requireAuth)
-// adding new post route route
 router.post('/createComment', createComment)
 router.delete('/deleteComment',deleteComment)
 

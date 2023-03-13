@@ -1,6 +1,9 @@
 const Post = require('../models/postModel')
 const User = require('../models/userModel')
 
+// createsPost using all the inputted info
+//some of the parameters might be null ike pollOptions and pollResults. but that's okay.
+//this creates the post than adds it to the user who created it
 const createPost = async (req, res) => {
     try {
         const {user,title,location,contentType,imgURL, content, pollOptions, pollResults} = req.body
@@ -14,6 +17,7 @@ const createPost = async (req, res) => {
     }
 }
 
+//calls schema method to edit post
 const editPost = async (req, res) => {
     try {
         const post = await Post.findOne({_id: req.body.postID})
@@ -24,7 +28,8 @@ const editPost = async (req, res) => {
     }
 }
         
-
+//deletes post by finding and deleting by id
+//also removes the post from the user
 const deletePost = async (req, res) => {
     try {
         const {user,postID} = req.body
@@ -37,6 +42,7 @@ const deletePost = async (req, res) => {
     }
 }
 
+//the upvote and downvote call the upvote and downvote in the postModel file
 const upVote = async (req, res) => {
     try {
         const _id = req.body.user
